@@ -1,0 +1,33 @@
+.tree-system-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #D0D7DE;
+  border-radius: 2px;
+}
+
+.tree-system-list {
+  padding: 8px;
+}
+
+.tree-system-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 20px 8px 8px;
+  border-bottom: 1px solid #D0D7DE;
+
+  & input {
+    color: black;
+    font-weight: 400;
+    width: 100%;
+    border: transparent;
+  }
+
+  & input:focus {
+    outline: transparent;
+  }
+
+  & input::placeholder {
+    color: #c1c9d2;
+  }
+}

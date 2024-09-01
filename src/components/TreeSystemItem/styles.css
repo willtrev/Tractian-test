@@ -1,0 +1,43 @@
+.tree-system-sublist {
+  padding-left: 20px;
+}
+
+.tree-system-item {
+  color: black;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-system-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 400;
+}
+
+.tree-system-expand {
+  all: unset;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+}
+
+.node-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 4px;
+  filter: invert(47%) sepia(100%) saturate(3048%) hue-rotate(196deg) brightness(99%) contrast(102%);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
+}
+
+.empty-node-margin {
+  margin-left: 24px;
+}
+

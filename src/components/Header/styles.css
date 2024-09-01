@@ -1,0 +1,64 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #17192D;
+  height: 3em;
+  padding-inline: 1em;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625em;
+}
+
+.nav-button {
+  all: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  max-height: 24px;
+
+  border-radius: 2px;
+  padding: 0.25em 0.5em;
+  gap: 0.5em;
+
+  background-color: #023B78;
+  color: white;
+
+  filter: drop-shadow(0px 2px hsla(0, 0%, 0%, 0.05));
+
+  
+  line-height: 1em;
+
+  &:hover {
+    filter: brightness(90%);
+    cursor: pointer;
+  }
+
+  & > img {
+    height: 14px;
+    width: 14px;
+  }
+
+  & > span {
+    font-size: 0.75em;
+    color: white;
+  }
+
+  current {
+    background-color: white;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.nav-button[data-current=true] {
+  background-color: hsla(212, 100%, 56%, 1);
+}

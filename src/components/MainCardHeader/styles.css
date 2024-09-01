@@ -1,0 +1,50 @@
+
+.main-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+}
+
+.main-card-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+
+  & h2 {
+    color: hsla(213, 13%, 16%, 1);
+    font-size: 20px;
+  }
+  & span {
+    color: hsla(211, 8%, 51%, 1);
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-button {
+  all: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: hsla(211, 8%, 51%, 1);
+  font-size: 14px;
+  padding: 6px 16px;
+  border: 1px solid #E3EAEF;
+  border-radius: 3px;
+}
+
+.active {
+  background-color: #1f87ff;
+  color: white;
+}
