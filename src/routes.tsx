@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
       //   element: <Home />,
       // },
       {
-        path: '/:companyId',
+        path: '/:companyId/:assetId?',
         element: <Home />,
         loader: companyLoader,
       },

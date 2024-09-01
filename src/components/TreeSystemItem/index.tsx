@@ -7,11 +7,27 @@ import ChevronIcon from '../../assets/chevron-icon.svg'
 import ComponentIcon from '../../assets/component.svg'
 import LocationIcon from '../../assets/location.svg'
 
-type Node = {
+type AssetLoaderData = {
+  id: string
   name: string
+  locationId?: string
+  gatewayId?: string
+  parentId?: string
+  sensorId?: string
+  sensorType?: string
+  status?: string
+}
+
+type LocationLoaderData = {
+  id: string
+  name: string
+  parentId?: string
+}
+
+type Node = {
   type: string
   nodes?: Node[]
-}
+} & (AssetLoaderData | LocationLoaderData)
 
 type IconMapType = {
   [key: string]: {
@@ -22,9 +38,13 @@ type IconMapType = {
 
 type TreeSystemItemProps = {
   node: Node
+  handleNavToDetails: (id: string) => void
 }
 
-export function TreeSystemItem({ node }: TreeSystemItemProps) {
+export function TreeSystemItem({
+  node,
+  handleNavToDetails,
+}: TreeSystemItemProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const iconMap: IconMapType = {
@@ -52,13 +72,26 @@ export function TreeSystemItem({ node }: TreeSystemItemProps) {
           alt={alt}
           className={`node-icon ${node.nodes && node.nodes?.length > 0 ? '' : 'empty-node-margin'}`}
         />
-        {node.name}
+        {node.type === 'Component' ? (
+          <button
+            className="tree-system-nav-button"
+            onClick={() => handleNavToDetails(node.id)}
+          >
+            {node.name}
+          </button>
+        ) : (
+          `${node.name}`
+        )}
       </span>
 
       {isOpen && (
         <ul className="tree-system-sublist">
           {node.nodes?.map((node) => (
-            <TreeSystemItem node={node} key={node.name} />
+            <TreeSystemItem
+              node={node}
+              key={node.id}
+              handleNavToDetails={handleNavToDetails}
+            />
           ))}
         </ul>
       )}

@@ -3,10 +3,14 @@
   flex-direction: column;
   border: 1px solid #D0D7DE;
   border-radius: 2px;
+  max-height: calc(100vh - 142px);
 }
 
 .tree-system-list {
   padding: 8px;
+  overflow-y: auto;
+  max-height: 100%;
+  height: min-content;
 }
 
 .tree-system-search {
@@ -30,4 +34,10 @@
   & input::placeholder {
     color: #c1c9d2;
   }
+}
+
+.tree-system-list-conatiner {
+  display: flex;
+  align-items: stretch;
+  overflow-y: scroll;
 }

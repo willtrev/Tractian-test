@@ -4,12 +4,28 @@ import PlaceholderImg from '../../assets/placeholder-img.png'
 import ReceptorIcon from '../../assets/receptor.svg'
 import SensorIcon from '../../assets/sensor.svg'
 
-export function DetailsContainer() {
+type AssetLoaderData = {
+  id: string
+  name: string
+  locationId?: string
+  gatewayId?: string
+  parentId?: string
+  sensorId?: string
+  sensorType?: string
+  status?: string
+}
+
+type DetailsContainerProps = {
+  asset?: AssetLoaderData
+}
+
+export function DetailsContainer({ asset }: DetailsContainerProps) {
+  if (!asset) return <div className="details-container" />
   return (
     <section className="details-container">
       <div>
         <div className="details-title-container">
-          <h2 className="details-title">Nome do item</h2>
+          <h2 className="details-title">{asset?.name ?? '--'}</h2>
         </div>
         <div className="details-content-container">
           <div className="details-content">
@@ -17,7 +33,7 @@ export function DetailsContainer() {
             <div className="details-content-info">
               <article className="content-article">
                 <h3>Tipo de Equipamento</h3>
-                <span>Motor Elétrico (Trifásico)</span>
+                <span>{asset.sensorType ?? '--'}</span>
               </article>
               <hr className="divider" />
               <article className="content-article">
@@ -38,14 +54,14 @@ export function DetailsContainer() {
                 <h3>Sensor</h3>
                 <div className="details-content-span">
                   <img src={SensorIcon} alt="três barras circulares" />
-                  <span>TFV655</span>
+                  <span>{asset.sensorId ?? '--'}</span>
                 </div>
               </article>
               <article className="content-article">
                 <h3>Responsáveis</h3>
                 <div className="details-content-span">
                   <img src={ReceptorIcon} alt="receptor de sinal" />
-                  <span>YTF265</span>
+                  <span>{asset.gatewayId ?? '--'}</span>
                 </div>
               </article>
             </div>

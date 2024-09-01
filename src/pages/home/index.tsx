@@ -1,83 +1,17 @@
 import './styles.css'
 
-import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
+import { useEffect, useReducer, useState } from 'react'
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 
 import { DetailsContainer } from '../../components/DetailsContainer'
 import { MainCardHeader } from '../../components/MainCardHeader'
 import { TreeSystemContainer } from '../../components/TreeSystemContainer'
-
-type Node = {
-  name: string
-  type: string
-  nodes?: Node[]
-}
-
-const nodes: Node[] = [
-  {
-    name: 'Home',
-    type: 'Location',
-    nodes: [
-      {
-        name: 'Movies',
-        type: 'Location',
-        nodes: [
-          {
-            name: 'Action',
-            type: 'Asset',
-            nodes: [
-              {
-                name: '2000s',
-                type: 'Asset',
-                nodes: [
-                  { name: 'Gladiator.mp4', type: 'Component' },
-                  { name: 'The-Dark-Knight.mp4', type: 'Component' },
-                ],
-              },
-              { name: '2010s', nodes: [], type: 'Component' },
-            ],
-          },
-          {
-            name: 'Comedy',
-            type: 'Asset',
-            nodes: [
-              {
-                name: '2000s',
-                type: 'Asset',
-                nodes: [{ name: 'Superbad.mp4', type: 'Component' }],
-              },
-            ],
-          },
-          {
-            name: 'Drama',
-            type: 'Asset',
-            nodes: [
-              {
-                name: '2000s',
-                type: 'Asset',
-                nodes: [{ name: 'American-Beauty.mp4', type: 'Component' }],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'Music',
-        type: 'Location',
-        nodes: [
-          { name: 'Rock', nodes: [], type: 'Component' },
-          { name: 'Classical', nodes: [], type: 'Component' },
-        ],
-      },
-      { name: 'Pictures', nodes: [], type: 'Component' },
-      {
-        name: 'Documents',
-        type: 'Component',
-        nodes: [],
-      },
-      { name: 'passwords.txt', type: 'Component', nodes: [] },
-    ],
-  },
-]
+import { treeReducer } from '../../hooks/useTreeViewReducer'
 
 type AssetLoaderData = {
   id: string
@@ -96,6 +30,11 @@ type LocationLoaderData = {
   parentId?: string
 }
 
+type Node = {
+  type: string
+  nodes?: Node[]
+} & (AssetLoaderData | LocationLoaderData)
+
 type CompanyLoaderData = {
   assets: AssetLoaderData[]
   locations: LocationLoaderData[]
@@ -105,6 +44,8 @@ type CompaniesLoaderSingleton = {
   (props: LoaderFunctionArgs): Promise<CompanyLoaderData>
   currentRequest?: Promise<CompanyLoaderData>
 }
+
+type NodeState = Node[]
 
 export const companyLoader: CompaniesLoaderSingleton = async (
   props: LoaderFunctionArgs,
@@ -136,16 +77,38 @@ export const companyLoader: CompaniesLoaderSingleton = async (
 }
 
 function Home() {
-  const { assets, locations } = useLoaderData() as CompanyLoaderData
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
 
-  console.log({ assets, locations })
+  const [selectedAssetId, setSelectedAssetId] = useState('')
+  const { assets, locations } = useLoaderData() as CompanyLoaderData
+  const initialState: NodeState = []
+
+  const [state, dispatch] = useReducer(treeReducer, initialState)
+
+  useEffect(() => {
+    dispatch({ type: 'ADD_DATA', payload: { locations, assets } })
+  }, [assets, locations])
+
+  const handleNavToDetails = (id: string) => {
+    const companyId = pathname.split('/')[1]
+    setSelectedAssetId(id)
+    navigate(`/${companyId}/${id}`)
+  }
+
+  const selectedAsset = assets.filter(
+    (asset) => asset.id === selectedAssetId,
+  )[0]
 
   return (
     <div className="main-card-container">
       <MainCardHeader />
       <div className="grid-view">
-        <TreeSystemContainer nodes={nodes} />
-        <DetailsContainer />
+        <TreeSystemContainer
+          nodes={state as Node[]}
+          handleNavToDetails={handleNavToDetails}
+        />
+        <DetailsContainer asset={selectedAsset} />
       </div>
     </div>
   )
