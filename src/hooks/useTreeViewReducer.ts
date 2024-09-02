@@ -77,13 +77,21 @@ function filterByCriticalStatus(node: Node): Node | null {
   return null
 }
 
-function filterNodesByName(nodes: Node[], name: string): Node[] {
-  return nodes
-    .filter((node) => node.name.toLowerCase().includes(name.toLowerCase()))
-    .map((node) => ({
-      ...node,
-      nodes: node.nodes ? filterNodesByName(node.nodes, name) : [],
-    }))
+function filterNodesByName(node: Node, name: string): Node | null {
+  if (node.nodes) {
+    const filteredNodes = node.nodes
+      .map((child) => filterNodesByName(child, name))
+      .filter((child) => child !== null) as Node[]
+
+    if (filteredNodes.length > 0) {
+      return { ...node, nodes: filteredNodes }
+    }
+  }
+  if (node.name.toLowerCase().includes(name.toLowerCase())) {
+    return node
+  }
+
+  return null
 }
 
 export function treeReducer(state: NodeState, action: Action): NodeState {
@@ -141,11 +149,10 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
     }
 
     case 'FILTER_BY_NAME': {
-      const filteredNodes = filterNodesByName(state.originalNodes, action.name)
-      return {
-        ...state,
-        filteredNodes,
-      }
+      const filteredNodes = state.originalNodes
+        .map((node) => filterNodesByName(node, action.name))
+        .filter((node) => node !== null) as Node[]
+      return { ...state, filteredNodes }
     }
 
     case 'RESET_FILTERS': {
