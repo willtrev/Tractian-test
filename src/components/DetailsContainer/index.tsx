@@ -25,7 +25,13 @@ export function DetailsContainer({ asset }: DetailsContainerProps) {
     <section className="details-container">
       <div>
         <div className="details-title-container">
-          <h2 className="details-title">{asset?.name ?? '--'}</h2>
+          <h2 className="details-title">{asset?.name ?? '--'} </h2>
+          <div
+            className="item-status"
+            style={{
+              backgroundColor: asset.status === 'alert' ? 'red' : '#52C41A',
+            }}
+          />
         </div>
         <div className="details-content-container">
           <div className="details-content">
@@ -40,9 +46,11 @@ export function DetailsContainer({ asset }: DetailsContainerProps) {
                 <h3>Responsáveis</h3>
                 <div className="details-content-span">
                   <div className="circle">
-                    <span>E</span>
+                    <span>{asset.sensorType === 'energy' ? 'E' : 'M'}</span>
                   </div>
-                  <span>Elétrica</span>
+                  <span>
+                    {asset.sensorType === 'energy' ? 'Elétrica' : 'Mecânica'}
+                  </span>
                 </div>
               </article>
             </div>

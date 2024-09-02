@@ -24,7 +24,7 @@
   }
 }
 
-.filter-form {
+.filter-buttons-row {
   display: flex;
   flex-direction: row;
   align-items: center;

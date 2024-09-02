@@ -1,6 +1,9 @@
 import './styles.css'
 
+import { useEffect, useState } from 'react'
+
 import SearchIcon from '../../assets/search.svg'
+import { useTree } from '../../contexts/TreeContext'
 import { TreeSystemItem } from '../TreeSystemItem'
 
 type AssetLoaderData = {
@@ -34,10 +37,40 @@ export function TreeSystemContainer({
   nodes,
   handleNavToDetails,
 }: TreeSystemContainerProps) {
+  const { dispatch } = useTree()
+
+  const [name, setName] = useState('')
+  const debouncedName = useDebounce(name, 300)
+
+  useEffect(() => {
+    dispatch({ type: 'FILTER_BY_NAME', name: debouncedName })
+  }, [debouncedName, dispatch])
+
+  function useDebounce(value: string, delay: number) {
+    const [debouncedValue, setDebouncedValue] = useState(value)
+
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value)
+      }, delay)
+
+      return () => {
+        clearTimeout(handler)
+      }
+    }, [value, delay])
+
+    return debouncedValue
+  }
+
   return (
     <section className="tree-system-container">
       <form action="" className="tree-system-search">
-        <input type="text" placeholder="Buscar Ativo ou Local" />
+        <input
+          type="text"
+          placeholder="Buscar Ativo ou Local"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
         <img src={SearchIcon} alt="lupa" />
       </form>
 

@@ -16,7 +16,9 @@ export function Header({ companies }: HeaderProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const isCurrentPage = (to: string) => pathname === to
+  const companyIdRoute = `/${pathname.split('/')[1]}`
+
+  const isCurrentPage = (to: string) => companyIdRoute === to
 
   const handleNavigate = (id: string) => {
     if (!isCurrentPage(id)) {

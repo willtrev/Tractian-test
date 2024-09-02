@@ -77,7 +77,17 @@ export function TreeSystemItem({
             className="tree-system-nav-button"
             onClick={() => handleNavToDetails(node.id)}
           >
-            {node.name}
+            {node.name}{' '}
+            <div
+              className="item-status"
+              style={{
+                backgroundColor:
+                  node.type === 'Component' &&
+                  (node as AssetLoaderData).status === 'alert'
+                    ? 'red'
+                    : '#52C41A',
+              }}
+            />
           </button>
         ) : (
           `${node.name}`

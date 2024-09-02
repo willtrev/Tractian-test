@@ -1,6 +1,6 @@
 import './styles.css'
 
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LoaderFunctionArgs,
   useLoaderData,
@@ -11,7 +11,7 @@ import {
 import { DetailsContainer } from '../../components/DetailsContainer'
 import { MainCardHeader } from '../../components/MainCardHeader'
 import { TreeSystemContainer } from '../../components/TreeSystemContainer'
-import { treeReducer } from '../../hooks/useTreeViewReducer'
+import { useTree } from '../../contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
@@ -45,7 +45,10 @@ type CompaniesLoaderSingleton = {
   currentRequest?: Promise<CompanyLoaderData>
 }
 
-type NodeState = Node[]
+export type NodeState = {
+  originalNodes: []
+  filteredNodes: []
+}
 
 export const companyLoader: CompaniesLoaderSingleton = async (
   props: LoaderFunctionArgs,
@@ -82,13 +85,12 @@ function Home() {
 
   const [selectedAssetId, setSelectedAssetId] = useState('')
   const { assets, locations } = useLoaderData() as CompanyLoaderData
-  const initialState: NodeState = []
 
-  const [state, dispatch] = useReducer(treeReducer, initialState)
+  const { state, dispatch } = useTree()
 
   useEffect(() => {
     dispatch({ type: 'ADD_DATA', payload: { locations, assets } })
-  }, [assets, locations])
+  }, [assets, dispatch, locations])
 
   const handleNavToDetails = (id: string) => {
     const companyId = pathname.split('/')[1]
@@ -105,7 +107,7 @@ function Home() {
       <MainCardHeader />
       <div className="grid-view">
         <TreeSystemContainer
-          nodes={state as Node[]}
+          nodes={state.filteredNodes as Node[]}
           handleNavToDetails={handleNavToDetails}
         />
         <DetailsContainer asset={selectedAsset} />
