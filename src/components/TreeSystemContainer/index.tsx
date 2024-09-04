@@ -3,7 +3,7 @@ import './styles.css'
 import { useEffect, useState } from 'react'
 
 import SearchIcon from '../../assets/search.svg'
-import { useTree } from '../../contexts/TreeContext'
+import { useTree } from '../../store/contexts/TreeContext'
 import { TreeSystemItem } from '../TreeSystemItem'
 
 type AssetLoaderData = {

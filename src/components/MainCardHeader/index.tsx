@@ -6,7 +6,7 @@ import CriticalIcon from '../../assets/critical.svg'
 import CriticalToggledIcon from '../../assets/critical-toggled.svg'
 import EnergyIcon from '../../assets/energy.svg'
 import EnergyToggledIcon from '../../assets/energy-toggled.svg'
-import { useTree } from '../../contexts/TreeContext'
+import { useTree } from '../../store/contexts/TreeContext'
 
 export function MainCardHeader() {
   const { dispatch } = useTree()

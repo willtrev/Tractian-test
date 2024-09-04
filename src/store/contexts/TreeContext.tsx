@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useReducer } from 'react'
 
-import { Action, NodeState, treeReducer } from '../hooks/useTreeViewReducer'
+import { Action, NodeState, treeReducer } from '../reducers/treeReducer'
 
 type TreeContextType = {
   state: NodeState

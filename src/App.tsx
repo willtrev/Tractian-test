@@ -2,8 +2,8 @@ import './global.css'
 
 import { RouterProvider } from 'react-router-dom'
 
-import { TreeProvider } from './contexts/TreeContext'
 import { router } from './routes'
+import { TreeProvider } from './store/contexts/TreeContext'
 
 function App() {
   return (

@@ -3,10 +3,10 @@ import './styles.css'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import PlaceholderImg from '../../assets/placeholder-img.png'
+import EmptyIcon from '../../assets/empty.svg'
 import ReceptorIcon from '../../assets/receptor.svg'
 import SensorIcon from '../../assets/sensor.svg'
-import { useTree } from '../../contexts/TreeContext'
+import { useTree } from '../../store/contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
@@ -44,8 +44,17 @@ export function DetailsContainer() {
   }, [state, componentId])
 
   if (!selectedNode) {
-    return <div className="details-container" />
+    return (
+      <div className="empty details-container">
+        <h2>Nenhum componente selecionado.</h2>
+        <span>
+          Selecione um componente na lista ao lado para ver os detalhes.
+        </span>
+      </div>
+    )
   }
+
+  const firstName = selectedNode.name.split(' ')[0]
 
   return (
     <section className="details-container">
@@ -62,11 +71,14 @@ export function DetailsContainer() {
         </div>
         <div className="details-content-container">
           <div className="details-content">
-            <img src={PlaceholderImg} alt="" />
+            <div className="empty-image">
+              <img src={EmptyIcon} alt="" />
+              <span>Componente sem imagem</span>
+            </div>
             <div className="details-content-info">
               <article className="content-article">
                 <h3>Tipo de Equipamento</h3>
-                <span>{selectedNode?.sensorType ?? '--'}</span>
+                <span>{firstName ?? '--'}</span>
               </article>
               <hr className="divider" />
               <article className="content-article">

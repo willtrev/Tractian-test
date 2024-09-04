@@ -6,7 +6,7 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom'
 import { DetailsContainer } from '../../components/DetailsContainer'
 import { MainCardHeader } from '../../components/MainCardHeader'
 import { TreeSystemContainer } from '../../components/TreeSystemContainer'
-import { useTree } from '../../contexts/TreeContext'
+import { useTree } from '../../store/contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
@@ -76,12 +76,8 @@ function Home() {
 
   const { companyId } = useParams()
 
-  const handleDispatch = () => {
-    dispatch({ type: 'ADD_DATA', payload: { locations, assets } })
-  }
-
   useEffect(() => {
-    handleDispatch()
+    dispatch({ type: 'ADD_DATA', payload: { locations, assets } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyId])
 

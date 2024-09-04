@@ -7,7 +7,7 @@ import AssetIcon from '../../assets/asset.svg'
 import ChevronIcon from '../../assets/chevron-icon.svg'
 import ComponentIcon from '../../assets/component.svg'
 import LocationIcon from '../../assets/location.svg'
-import { useTree } from '../../contexts/TreeContext'
+import { useTree } from '../../store/contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
