@@ -109,7 +109,7 @@ export function DetailsContainer() {
                 </div>
               </article>
               <article className="content-article">
-                <h3>Responsáveis</h3>
+                <h3>Receptor</h3>
                 <div className="details-content-span">
                   <img src={ReceptorIcon} alt="receptor de sinal" />
                   <span>{selectedNode?.gatewayId ?? '--'}</span>
