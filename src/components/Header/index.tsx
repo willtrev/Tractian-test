@@ -1,6 +1,6 @@
 import './styles.css'
 
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import GoldIcon from '../../assets/gold.svg'
 import Logo from '../../assets/logo-tractian.png'
@@ -13,10 +13,10 @@ type HeaderProps = {
 }
 
 export function Header({ companies }: HeaderProps) {
-  const { pathname } = useLocation()
+  const { companyId } = useParams()
   const navigate = useNavigate()
 
-  const companyIdRoute = `/${pathname.split('/')[1]}`
+  const companyIdRoute = `/${companyId}`
 
   const isCurrentPage = (to: string) => companyIdRoute === to
 

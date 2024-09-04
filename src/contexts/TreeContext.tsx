@@ -12,6 +12,8 @@ const TreeContext = createContext<TreeContextType | undefined>(undefined)
 const initialState: NodeState = {
   originalNodes: [],
   filteredNodes: [],
+  selectedNode: null,
+  assets: [],
 }
 
 export const TreeProvider: React.FC<{ children: ReactNode }> = ({

@@ -1,11 +1,13 @@
 import './styles.css'
 
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import AssetIcon from '../../assets/asset.svg'
 import ChevronIcon from '../../assets/chevron-icon.svg'
 import ComponentIcon from '../../assets/component.svg'
 import LocationIcon from '../../assets/location.svg'
+import { useTree } from '../../contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
@@ -38,13 +40,9 @@ type IconMapType = {
 
 type TreeSystemItemProps = {
   node: Node
-  handleNavToDetails: (id: string) => void
 }
 
-export function TreeSystemItem({
-  node,
-  handleNavToDetails,
-}: TreeSystemItemProps) {
+export function TreeSystemItem({ node }: TreeSystemItemProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const iconMap: IconMapType = {
@@ -52,6 +50,9 @@ export function TreeSystemItem({
     Component: { src: ComponentIcon, alt: 'Componente' },
     Asset: { src: AssetIcon, alt: 'Asset' },
   }
+
+  const { dispatch } = useTree()
+  const [, setSearchParams] = useSearchParams()
 
   const { src, alt } = iconMap[node.type]
 
@@ -75,7 +76,10 @@ export function TreeSystemItem({
         {node.type === 'Component' ? (
           <button
             className="tree-system-nav-button"
-            onClick={() => handleNavToDetails(node.id)}
+            onClick={() => {
+              dispatch({ type: 'SET_SELECTED_NODE', selectedNode: node })
+              setSearchParams({ componentId: node.id })
+            }}
           >
             {node.name}{' '}
             <div
@@ -97,11 +101,7 @@ export function TreeSystemItem({
       {isOpen && (
         <ul className="tree-system-sublist">
           {node.nodes?.map((node) => (
-            <TreeSystemItem
-              node={node}
-              key={node.id}
-              handleNavToDetails={handleNavToDetails}
-            />
+            <TreeSystemItem node={node} key={node.id} />
           ))}
         </ul>
       )}

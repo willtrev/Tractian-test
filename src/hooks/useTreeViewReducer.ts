@@ -23,6 +23,8 @@ type Node = {
 export type NodeState = {
   originalNodes: Node[]
   filteredNodes: Node[]
+  selectedNode: AssetLoaderData | null
+  assets: AssetLoaderData[]
 }
 
 export type Action =
@@ -34,6 +36,8 @@ export type Action =
   | { type: 'FILTER_BY_CRITICAL_STATUS' }
   | { type: 'FILTER_BY_NAME'; name: string }
   | { type: 'RESET_FILTERS' }
+  | { type: 'SET_SELECTED_NODE'; selectedNode: Node }
+  | { type: 'GET_COMPONENT_BY_ID'; assetId: string }
 
 function filterByEnergySensor(node: Node): Node | null {
   if (
@@ -131,7 +135,24 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
         }
       })
 
-      return { originalNodes: rootNodes, filteredNodes: rootNodes }
+      return {
+        ...state,
+        originalNodes: rootNodes,
+        filteredNodes: rootNodes,
+        assets,
+      }
+    }
+
+    case 'GET_COMPONENT_BY_ID': {
+      const component = state.assets.find(
+        (asset) => asset.id === action.assetId,
+      )
+
+      if (!component) {
+        return state
+      }
+
+      return { ...state, selectedNode: component }
     }
 
     case 'FILTER_BY_ENERGY_SENSOR': {
@@ -157,6 +178,10 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
 
     case 'RESET_FILTERS': {
       return { ...state, filteredNodes: state.originalNodes }
+    }
+
+    case 'SET_SELECTED_NODE': {
+      return { ...state, selectedNode: action.selectedNode }
     }
 
     default:

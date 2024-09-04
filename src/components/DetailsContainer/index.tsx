@@ -1,8 +1,12 @@
 import './styles.css'
 
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+
 import PlaceholderImg from '../../assets/placeholder-img.png'
 import ReceptorIcon from '../../assets/receptor.svg'
 import SensorIcon from '../../assets/sensor.svg'
+import { useTree } from '../../contexts/TreeContext'
 
 type AssetLoaderData = {
   id: string
@@ -15,21 +19,44 @@ type AssetLoaderData = {
   status?: string
 }
 
-type DetailsContainerProps = {
-  asset?: AssetLoaderData
-}
+export function DetailsContainer() {
+  const { state, dispatch } = useTree()
+  const [selectedNode, setSelectedNode] = useState<AssetLoaderData | null>(null)
+  const [searchParams] = useSearchParams()
+  const componentId = searchParams.get('componentId')
 
-export function DetailsContainer({ asset }: DetailsContainerProps) {
-  if (!asset) return <div className="details-container" />
+  useEffect(() => {
+    if (componentId) {
+      if (state.selectedNode?.id !== componentId) {
+        dispatch({ type: 'GET_COMPONENT_BY_ID', assetId: componentId })
+      } else {
+        setSelectedNode(state.selectedNode)
+      }
+    } else {
+      setSelectedNode(null)
+    }
+  }, [componentId, state.selectedNode, dispatch])
+
+  useEffect(() => {
+    if (state.selectedNode?.id === componentId) {
+      setSelectedNode(state.selectedNode)
+    }
+  }, [state, componentId])
+
+  if (!selectedNode) {
+    return <div className="details-container" />
+  }
+
   return (
     <section className="details-container">
       <div>
         <div className="details-title-container">
-          <h2 className="details-title">{asset?.name ?? '--'} </h2>
+          <h2 className="details-title">{selectedNode?.name ?? '--'} </h2>
           <div
             className="item-status"
             style={{
-              backgroundColor: asset.status === 'alert' ? 'red' : '#52C41A',
+              backgroundColor:
+                selectedNode?.status === 'alert' ? 'red' : '#52C41A',
             }}
           />
         </div>
@@ -39,17 +66,21 @@ export function DetailsContainer({ asset }: DetailsContainerProps) {
             <div className="details-content-info">
               <article className="content-article">
                 <h3>Tipo de Equipamento</h3>
-                <span>{asset.sensorType ?? '--'}</span>
+                <span>{selectedNode?.sensorType ?? '--'}</span>
               </article>
               <hr className="divider" />
               <article className="content-article">
                 <h3>Responsáveis</h3>
                 <div className="details-content-span">
                   <div className="circle">
-                    <span>{asset.sensorType === 'energy' ? 'E' : 'M'}</span>
+                    <span>
+                      {selectedNode?.sensorType === 'energy' ? 'E' : 'M'}
+                    </span>
                   </div>
                   <span>
-                    {asset.sensorType === 'energy' ? 'Elétrica' : 'Mecânica'}
+                    {selectedNode?.sensorType === 'energy'
+                      ? 'Elétrica'
+                      : 'Mecânica'}
                   </span>
                 </div>
               </article>
@@ -62,14 +93,14 @@ export function DetailsContainer({ asset }: DetailsContainerProps) {
                 <h3>Sensor</h3>
                 <div className="details-content-span">
                   <img src={SensorIcon} alt="três barras circulares" />
-                  <span>{asset.sensorId ?? '--'}</span>
+                  <span>{selectedNode?.sensorId ?? '--'}</span>
                 </div>
               </article>
               <article className="content-article">
                 <h3>Responsáveis</h3>
                 <div className="details-content-span">
                   <img src={ReceptorIcon} alt="receptor de sinal" />
-                  <span>{asset.gatewayId ?? '--'}</span>
+                  <span>{selectedNode?.gatewayId ?? '--'}</span>
                 </div>
               </article>
             </div>

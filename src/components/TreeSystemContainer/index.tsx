@@ -28,16 +28,10 @@ type Node = {
   nodes?: Node[]
 } & (AssetLoaderData | LocationLoaderData)
 
-interface TreeSystemContainerProps {
-  nodes: Node[]
-  handleNavToDetails: (id: string) => void
-}
+export function TreeSystemContainer() {
+  const { dispatch, state } = useTree()
 
-export function TreeSystemContainer({
-  nodes,
-  handleNavToDetails,
-}: TreeSystemContainerProps) {
-  const { dispatch } = useTree()
+  const nodes = state.filteredNodes as Node[]
 
   const [name, setName] = useState('')
   const debouncedName = useDebounce(name, 300)
@@ -76,11 +70,7 @@ export function TreeSystemContainer({
 
       <ul className="tree-system-list">
         {nodes.map((node) => (
-          <TreeSystemItem
-            node={node}
-            key={node.id}
-            handleNavToDetails={handleNavToDetails}
-          />
+          <TreeSystemItem node={node} key={node.id} />
         ))}
       </ul>
     </section>

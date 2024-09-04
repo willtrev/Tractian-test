@@ -1,12 +1,7 @@
 import './styles.css'
 
-import { useEffect, useState } from 'react'
-import {
-  LoaderFunctionArgs,
-  useLoaderData,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
+import { useEffect } from 'react'
+import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom'
 
 import { DetailsContainer } from '../../components/DetailsContainer'
 import { MainCardHeader } from '../../components/MainCardHeader'
@@ -29,15 +24,10 @@ type LocationLoaderData = {
   name: string
   parentId?: string
 }
-
-type Node = {
-  type: string
-  nodes?: Node[]
-} & (AssetLoaderData | LocationLoaderData)
-
 type CompanyLoaderData = {
   assets: AssetLoaderData[]
   locations: LocationLoaderData[]
+  companyId: string
 }
 
 type CompaniesLoaderSingleton = {
@@ -68,6 +58,7 @@ export const companyLoader: CompaniesLoaderSingleton = async (
       const data: CompanyLoaderData = {
         assets: assetsResponse,
         locations: locationsResponse,
+        companyId: companyId!,
       }
 
       return data
@@ -80,37 +71,26 @@ export const companyLoader: CompaniesLoaderSingleton = async (
 }
 
 function Home() {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-
-  const [selectedAssetId, setSelectedAssetId] = useState('')
   const { assets, locations } = useLoaderData() as CompanyLoaderData
+  const { dispatch } = useTree()
 
-  const { state, dispatch } = useTree()
+  const { companyId } = useParams()
 
-  useEffect(() => {
+  const handleDispatch = () => {
     dispatch({ type: 'ADD_DATA', payload: { locations, assets } })
-  }, [assets, dispatch, locations])
-
-  const handleNavToDetails = (id: string) => {
-    const companyId = pathname.split('/')[1]
-    setSelectedAssetId(id)
-    navigate(`/${companyId}/${id}`)
   }
 
-  const selectedAsset = assets.filter(
-    (asset) => asset.id === selectedAssetId,
-  )[0]
+  useEffect(() => {
+    handleDispatch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companyId])
 
   return (
     <div className="main-card-container">
       <MainCardHeader />
       <div className="grid-view">
-        <TreeSystemContainer
-          nodes={state.filteredNodes as Node[]}
-          handleNavToDetails={handleNavToDetails}
-        />
-        <DetailsContainer asset={selectedAsset} />
+        <TreeSystemContainer />
+        <DetailsContainer />
       </div>
     </div>
   )
