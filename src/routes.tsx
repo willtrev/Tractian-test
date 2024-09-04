@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
     loader: companiesLoader,
     children: [
       {
-        path: '/:companyId/:assetId?',
+        path: '/:companyId',
         element: <Home />,
         loader: companyLoader,
       },
