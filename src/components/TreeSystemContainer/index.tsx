@@ -1,6 +1,7 @@
 import './styles.css'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import SearchIcon from '../../assets/search.svg'
 import { useTree } from '../../store/contexts/TreeContext'
@@ -30,6 +31,7 @@ type Node = {
 
 export function TreeSystemContainer() {
   const { dispatch, state } = useTree()
+  const { companyId } = useParams()
 
   const nodes = state.filteredNodes as Node[]
 
@@ -39,6 +41,10 @@ export function TreeSystemContainer() {
   useEffect(() => {
     dispatch({ type: 'FILTER_BY_NAME', name: debouncedName })
   }, [debouncedName, dispatch])
+
+  useEffect(() => {
+    setName('')
+  }, [companyId])
 
   function useDebounce(value: string, delay: number) {
     const [debouncedValue, setDebouncedValue] = useState(value)

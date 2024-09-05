@@ -1,6 +1,7 @@
 import './styles.css'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import CriticalIcon from '../../assets/critical.svg'
 import CriticalToggledIcon from '../../assets/critical-toggled.svg'
@@ -13,6 +14,8 @@ export function MainCardHeader() {
   const [isFilteringEnergy, setIsFilteringEnergy] = useState(false)
   const [isFilteringCriticalStatus, setIsFilteringCriticalStatus] =
     useState(false)
+
+  const params = useParams()
 
   function filterByEnergy() {
     if (isFilteringEnergy) {
@@ -49,6 +52,11 @@ export function MainCardHeader() {
     setIsFilteringCriticalStatus(false)
     dispatch({ type: 'RESET_FILTERS' })
   }
+
+  useEffect(() => {
+    resetFilters()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.companyId])
 
   return (
     <div className="main-card-header">
