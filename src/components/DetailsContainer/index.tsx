@@ -35,7 +35,7 @@ export function DetailsContainer() {
     } else {
       setSelectedNode(null)
     }
-  }, [componentId, state.selectedNode, dispatch])
+  }, [componentId, state, dispatch])
 
   useEffect(() => {
     if (state.selectedNode?.id === componentId) {
