@@ -43,7 +43,7 @@ export function DetailsContainer() {
     }
   }, [state, componentId])
 
-  if (!selectedNode) {
+  if (!selectedNode && !componentId) {
     return (
       <div className="empty details-container">
         <h2>Nenhum componente selecionado.</h2>
@@ -54,7 +54,15 @@ export function DetailsContainer() {
     )
   }
 
-  const firstName = selectedNode.name.split(' ')[0]
+  if (!selectedNode && componentId) {
+    return (
+      <div className="empty details-container">
+        <div className="loader" />
+      </div>
+    )
+  }
+
+  const firstName = selectedNode?.name.split(' ')[0]
 
   return (
     <section className="details-container">
