@@ -10,7 +10,7 @@ import EnergyToggledIcon from '../../assets/energy-toggled.svg'
 import { useTree } from '../../store/contexts/TreeContext'
 
 export function MainCardHeader() {
-  const { dispatch } = useTree()
+  const { dispatch, state } = useTree()
   const [isFilteringEnergy, setIsFilteringEnergy] = useState(false)
   const [isFilteringCriticalStatus, setIsFilteringCriticalStatus] =
     useState(false)
@@ -51,6 +51,9 @@ export function MainCardHeader() {
     setIsFilteringEnergy(false)
     setIsFilteringCriticalStatus(false)
     dispatch({ type: 'RESET_FILTERS' })
+    if (state.name !== '') {
+      dispatch({ type: 'FILTER_BY_NAME', name: state.name })
+    }
   }
 
   useEffect(() => {

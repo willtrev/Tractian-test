@@ -14,6 +14,7 @@ const initialState: NodeState = {
   filteredNodes: [],
   selectedNode: null,
   assets: [],
+  name: '',
 }
 
 export const TreeProvider: React.FC<{ children: ReactNode }> = ({

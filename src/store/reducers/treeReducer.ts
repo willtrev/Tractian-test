@@ -25,6 +25,7 @@ export type NodeState = {
   filteredNodes: Node[]
   selectedNode: AssetLoaderData | null
   assets: AssetLoaderData[]
+  name: string
 }
 
 export type Action =
@@ -170,10 +171,10 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
     }
 
     case 'FILTER_BY_NAME': {
-      const filteredNodes = state.originalNodes
+      const filteredNodes = state.filteredNodes
         .map((node) => filterNodesByName(node, action.name))
         .filter((node) => node !== null) as Node[]
-      return { ...state, filteredNodes }
+      return { ...state, filteredNodes, name: action.name }
     }
 
     case 'RESET_FILTERS': {
