@@ -17,43 +17,49 @@ export function MainCardHeader() {
 
   const params = useParams()
 
+  console.log(state.filters)
+
   function filterByEnergy() {
     if (isFilteringEnergy) {
-      resetFilters()
+      setIsFilteringEnergy(false)
+      dispatch({
+        type: 'FILTER_TREE',
+        filters: { ...state.filters, energy: false },
+      })
       return
     }
 
-    if (isFilteringCriticalStatus) {
-      resetFilters()
-      setIsFilteringCriticalStatus(false)
-    }
-
     setIsFilteringEnergy(true)
-    dispatch({ type: 'FILTER_BY_ENERGY_SENSOR' })
+    dispatch({
+      type: 'FILTER_TREE',
+      filters: { ...state.filters, energy: true },
+    })
   }
 
   function filterByCriticalStatus() {
     if (isFilteringCriticalStatus) {
-      resetFilters()
+      setIsFilteringCriticalStatus(false)
+      dispatch({
+        type: 'FILTER_TREE',
+        filters: { ...state.filters, critical: false },
+      })
       return
     }
 
-    if (isFilteringEnergy) {
-      resetFilters()
-      setIsFilteringEnergy(false)
-    }
-
     setIsFilteringCriticalStatus(true)
-    dispatch({ type: 'FILTER_BY_CRITICAL_STATUS' })
+    dispatch({
+      type: 'FILTER_TREE',
+      filters: { ...state.filters, critical: true },
+    })
   }
 
   function resetFilters() {
     setIsFilteringEnergy(false)
     setIsFilteringCriticalStatus(false)
-    dispatch({ type: 'RESET_FILTERS' })
-    if (state.name !== '') {
-      dispatch({ type: 'FILTER_BY_NAME', name: state.name })
-    }
+    dispatch({
+      type: 'FILTER_TREE',
+      filters: { ...state.filters, energy: false, critical: false },
+    })
   }
 
   useEffect(() => {

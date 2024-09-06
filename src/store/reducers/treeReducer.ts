@@ -20,12 +20,18 @@ type Node = {
   nodes?: Node[]
 } & (AssetLoaderData | LocationLoaderData)
 
+type FilterProps = {
+  energy: boolean
+  critical: boolean
+  name: string
+}
+
 export type NodeState = {
   originalNodes: Node[]
   filteredNodes: Node[]
   selectedNode: AssetLoaderData | null
   assets: AssetLoaderData[]
-  name: string
+  filters: FilterProps
 }
 
 export type Action =
@@ -33,9 +39,7 @@ export type Action =
       type: 'ADD_DATA'
       payload: { locations: LocationLoaderData[]; assets: AssetLoaderData[] }
     }
-  | { type: 'FILTER_BY_ENERGY_SENSOR' }
-  | { type: 'FILTER_BY_CRITICAL_STATUS' }
-  | { type: 'FILTER_BY_NAME'; name: string }
+  | { type: 'FILTER_TREE'; filters: FilterProps }
   | { type: 'RESET_FILTERS' }
   | { type: 'SET_SELECTED_NODE'; selectedNode: Node }
   | { type: 'GET_COMPONENT_BY_ID'; assetId: string }
@@ -156,29 +160,64 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
       return { ...state, selectedNode: component }
     }
 
-    case 'FILTER_BY_ENERGY_SENSOR': {
-      const filteredNodes = state.originalNodes
-        .map((node) => filterByEnergySensor(node))
+    case 'FILTER_TREE': {
+      const filteredNodesByName = state.originalNodes
+        .map((node) => filterNodesByName(node, action.filters.name))
         .filter((node) => node !== null) as Node[]
-      return { ...state, filteredNodes }
+
+      const filteredNodesByEnergy = action.filters.energy
+        ? (filteredNodesByName
+            .map((node) => filterByEnergySensor(node))
+            .filter((node) => node !== null) as Node[])
+        : filteredNodesByName
+
+      const filteredNodes = action.filters.critical
+        ? (filteredNodesByEnergy
+            .map((node) => filterByCriticalStatus(node))
+            .filter((node) => node !== null) as Node[])
+        : filteredNodesByEnergy
+
+      return {
+        ...state,
+        filteredNodes,
+        filters: action.filters,
+      }
     }
 
-    case 'FILTER_BY_CRITICAL_STATUS': {
-      const filteredNodes = state.originalNodes
-        .map((node) => filterByCriticalStatus(node))
-        .filter((node) => node !== null) as Node[]
-      return { ...state, filteredNodes }
-    }
+    // case 'FILTER_TREE': {
+    //   let filteredNodes = state.originalNodes
 
-    case 'FILTER_BY_NAME': {
-      const filteredNodes = state.filteredNodes
-        .map((node) => filterNodesByName(node, action.name))
-        .filter((node) => node !== null) as Node[]
-      return { ...state, filteredNodes, name: action.name }
+    //   if (action.filters.energy) {
+    //     filteredNodes = filteredNodes
+    //       .map((node) => filterByEnergySensor(node))
+    //       .filter((node) => node !== null) as Node[]
+    //   }
+
+    //   if (action.filters.critical) {
+    //     filteredNodes = filteredNodes
+    //       .map((node) => filterByCriticalStatus(node))
+    //       .filter((node) => node !== null) as Node[]
+    //   }
+
+    //   if (state.filters.name !== action.filters.name) {
+    //     filteredNodes = filteredNodes
+    //       .map((node) => filterNodesByName(node, action.filters.name))
+    //       .filter((node) => node !== null) as Node[]
+    //   }
+
+      return {
+        ...state,
+        filteredNodes,
+        filters: action.filters,
+      }
     }
 
     case 'RESET_FILTERS': {
-      return { ...state, filteredNodes: state.originalNodes }
+      return {
+        ...state,
+        filteredNodes: state.originalNodes,
+        filters: { name: '', critical: false, energy: false },
+      }
     }
 
     case 'SET_SELECTED_NODE': {

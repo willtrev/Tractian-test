@@ -39,7 +39,12 @@ export function TreeSystemContainer() {
   const debouncedName = useDebounce(name, 300)
 
   useEffect(() => {
-    dispatch({ type: 'FILTER_BY_NAME', name: debouncedName })
+    // dispatch({ type: 'FILTER_BY_NAME', name: debouncedName })
+    dispatch({
+      type: 'FILTER_TREE',
+      filters: { ...state.filters, name: debouncedName },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName, dispatch])
 
   useEffect(() => {
