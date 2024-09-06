@@ -1,52 +1,25 @@
-# Preview: https://willtrev-tractian-challenge.netlify.app/
+# Front End Software Engineer Challenge
 
-## React + TypeScript + Vite
+## Preview: https://willtrev-tractian-challenge.netlify.app/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Desafio: [Front End Software Engineer Challenge](https://github.com/tractian/challenges/blob/main/front-end/README.md)
 
-Currently, two official plugins are available:
+### Video de demonstração da aplicação: [Gravação](https://youtu.be/iwNV1voQBKc)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Melhorias planejadas:
+- **Responsividade**: Adicionar suporte completo para dispositivos móveis e tablets.
+- **Cache de Filtros**: Implementar funcionalidade para salvar filtros aplicados em cache, melhorando a experiência do usuário.
 
-## Expanding the ESLint configuration
+## Decisões de design e desenvolvimento:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Filtros combinados**: Os filtros de "sensor de energia" e "crítico" foram projetados para funcionarem simultaneamente, aprimorando a usabilidade da aplicação.
+- **Tipo de equipamento e responsáveis**:
+  - O tipo de equipamento não estava disponível diretamente na requisição. Foi utilizada uma estratégia de split na primeira palavra do nome do componente para exibir o tipo de equipamento.
+  - Para sensores de energia, os responsáveis foram definidos como "Elétrica", e para sensores de vibração, como "Mecânica".
+- **Imagens de componentes**: Como as imagens dos componentes não estavam disponíveis, foi criada uma box de placeholder informando que não há imagem disponível.
 
-- Configure the top-level `parserOptions` property like this:
+### Tecnologias utilizadas:
+- **Frontend**: ReactJS, Vite, TypeScript.
+- **Linting**: ESLint.
+- **Roteamento**: React Router Dom.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
