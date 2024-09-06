@@ -184,34 +184,6 @@ export function treeReducer(state: NodeState, action: Action): NodeState {
       }
     }
 
-    // case 'FILTER_TREE': {
-    //   let filteredNodes = state.originalNodes
-
-    //   if (action.filters.energy) {
-    //     filteredNodes = filteredNodes
-    //       .map((node) => filterByEnergySensor(node))
-    //       .filter((node) => node !== null) as Node[]
-    //   }
-
-    //   if (action.filters.critical) {
-    //     filteredNodes = filteredNodes
-    //       .map((node) => filterByCriticalStatus(node))
-    //       .filter((node) => node !== null) as Node[]
-    //   }
-
-    //   if (state.filters.name !== action.filters.name) {
-    //     filteredNodes = filteredNodes
-    //       .map((node) => filterNodesByName(node, action.filters.name))
-    //       .filter((node) => node !== null) as Node[]
-    //   }
-
-      return {
-        ...state,
-        filteredNodes,
-        filters: action.filters,
-      }
-    }
-
     case 'RESET_FILTERS': {
       return {
         ...state,
